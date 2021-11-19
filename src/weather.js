@@ -22,10 +22,14 @@ function formatData(data) {
         "dt": data.dt,
         "name": data.name,
     }
-    console.log("WEATHER DATA", weatherData)
+    // console.log("WEATHER DATA", weatherData)
     return weatherData
 }
 
+function convertTime(UTCString) {
+    // Convert a UTC timestring to readable locale time
+
+}
 
 function getWindData(windData) {
     // Given wind data as an array with speed, direction, and gust strenght
@@ -40,14 +44,14 @@ function getWindData(windData) {
     let windKeys = Object.keys(parsedWindData);
 
     for (let i = 0; i < windKeys.length; i++) {
-        console.log(windData[windKeys[i]])
+        // console.log(windData[windKeys[i]])
 
         if(windData[windKeys[i]] === undefined) {
             parsedWindData[windKeys[i]] = 'N/A';
         } else {
             if(windKeys[i] === 'deg') {
                 parsedWindData[windKeys[i]] = getWindDirection(windData[windKeys[i]]);
-                console.log(parsedWindData[windKeys[i]])
+                // console.log(parsedWindData[windKeys[i]])
             } else {
                 parsedWindData[windKeys[i]] = windData[windKeys[i]];
 
@@ -79,7 +83,7 @@ function getWindDirection(windDirection) {
         return 'Northwest'
     } else if(windDirection > 315 && windDirection < 360) {
         return 'North'
-    }
+    } else return 'N/A'
 }
 
 export { getWeatherData, formatData }
