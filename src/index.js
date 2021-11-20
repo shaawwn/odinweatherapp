@@ -31,7 +31,7 @@ function changeBackground(data) {
     if(localTime > sunset && localTime < addTimes(sunset, 1)) {
         // Dusk
         document.body.style.backgroundImage = `url(${Dusk})`
-    } else if(localTime > addTimes(sunset, 1)) {
+    } else if(localTime > addTimes(sunset, 1) || localTime < sunrise) {
         // Night
         document.body.style.backgroundImage = `url(${Night})`
     } else if(localTime > sunrise && localTime < addTimes(sunrise, 1)) {
@@ -40,6 +40,8 @@ function changeBackground(data) {
     } else if(localTime > sunrise) {
         // Day
         document.body.style.backgroundImage = `url(${Day})`
+    } else {
+        console.log("No conditions being met to change background.", sunrise, sunset, localTime)
     }
 }
 function addLocationForm() {
@@ -66,35 +68,56 @@ function addWeatherDataToPage(data) {
     // Use the formatted weather data from the api, create and populate
     // elements
     changeBackground(data);
+    // toCapitolize(data.description)
+    const fahCel = 'F';
     if(weatherContainer.innerHTML != '') {
         weatherContainer.innerHTML = '';
     }
     const highLow = document.createElement('div');
     const cityState = document.createElement('p');
     const localTime = document.createElement('p');
+
+    const tempDiv = document.createElement('div');
+    const tempDetails = document.createElement('div');
     const currentTemp = document.createElement('p');
     const feelsLike = document.createElement('p');
-    const currentWeather = document.createElement('img') // The 'current weather' iamge, like cloudy, etc
+
+    const currentWeatherDiv = document.createElement('div');
+    const currentWeatherIcon = document.createElement('img') // The 'current weather' iamge, like cloudy, etc
+    const currentDescription = document.createElement('p');
+
     const sunriseSunset = document.createElement('div');
     const wind = document.createElement('p');
 
+    cityState.classList.add('city-state');
+    tempDiv.classList.add('temp-container');
+    tempDetails.classList.add('temp-details');
+    currentWeatherDiv.classList.add('current-weather-container');
     currentTemp.classList.add('current-temp');
-
-    highLow.innerText = `High: ${data.main.temp_max.toFixed(0)}° Low: ${data.main.temp_min.toFixed(0)}°`;
+    currentWeatherIcon.classList.add('current-weather');
+    sunriseSunset.classList.add('sunrise-sunset');
+    tempDiv.appendChild(currentTemp);
+    tempDiv.appendChild(tempDetails);
+    tempDetails.appendChild(highLow);
+    tempDetails.appendChild(feelsLike);
+    currentWeatherDiv.appendChild(currentDescription);
+    currentWeatherDiv.appendChild(currentWeatherIcon);
+    
+    highLow.innerText = `H: ${data.main.temp_max.toFixed(0)}° L: ${data.main.temp_min.toFixed(0)}°`;
     cityState.innerText = `${data.name}, ${data.country}`;
-    localTime.innerText = `Local time ${changeTimeFormat(convertUTC((data.dt + data.timezone) * 1000))}`
+    localTime.innerText = `${changeTimeFormat(convertUTC((data.dt + data.timezone) * 1000))}`
     currentTemp.innerText = `${data.main.temp.toFixed(0)}°`;
     feelsLike.innerText = `Feels like: ${data.main.feels_like.toFixed(0)}°`
-    // currentWeather
+    currentWeatherIcon.src = `http://openweathermap.org/img/wn/${data.icon}@4x.png` // file = 12d.png @4x is the size of the icon
+    currentDescription.innerText = toCapitolize(data.description)
     sunriseSunset.innerText = `Sunrise: ${changeTimeFormat(convertUTC(data.sunrise * 1000))} Sunset: ${changeTimeFormat(convertUTC(data.sunset * 1000))}`;
     wind.innerText = `Current Wind Speed: ${data.wind['speed']} Direction: ${data.wind['deg']} Gusts: ${data.wind['gust']}`;
     console.log("Adding data", data)
 
-    weatherContainer.appendChild(highLow)
     weatherContainer.appendChild(cityState)
     weatherContainer.appendChild(localTime);
-    weatherContainer.appendChild(currentTemp)
-    weatherContainer.appendChild(feelsLike)
+    weatherContainer.appendChild(tempDiv)
+    weatherContainer.appendChild(currentWeatherDiv);
     weatherContainer.appendChild(sunriseSunset)
     weatherContainer.appendChild(wind)
 
@@ -113,20 +136,6 @@ function addTimes(toChange, increment) {
     return toChange.join("")
 }
 
-
-// if(changeTimeFormat('23:00') === '11:00') {
-//     console.log("23 => 11")
-// } else {
-//     throw new Error("23:00 did not become 11:00")
-// }
-
-// if(changeTimeFormat('03:00') === '03:00') {
-//     console.log("3:00 remains unchange")
-// } else {
-//     throw new Error("Uneeded conversion of pre-12 time")
-// }
-
-
 // toggle between 24 and 12 hours times
 function changeTimeFormat(timeToConvert) {
     // convert a time string in 24 hour format into 12 hour format
@@ -135,22 +144,27 @@ function changeTimeFormat(timeToConvert) {
         let adjustedTime = timeToConvert.slice(0,2) - 12
         timeToConvert = timeToConvert.split("")
         timeToConvert.splice(0, 2, adjustedTime.toString())
+        timeToConvert.push('pm');
         return timeToConvert.join("")
     } else {
-        // do nothing
-        return timeToConvert
+        // remove leading 0
+        timeToConvert = timeToConvert.split("");
+        timeToConvert.splice(0, 1, '');
+        timeToConvert.push('am');
+        return timeToConvert.join("")
     }
 }   
 
+function toCapitolize(string) {
+    // Capitolize the first letter in each word of a string
+    string = string.split(" ")
 
-// console.log(addTimes("11:30", "2"))
-// Testing
-function testComponent() {
-    let testbanner = document.createElement('div');
-    testbanner.classList.add('test');
-
-    document.body.appendChild(testbanner);
+    for (let i = 0; i < string.length;i++) {
+        // console.log(string[i].slice(0,1).toUpperCase())
+        string[i] = string[i].slice(0, 1).toUpperCase() + string[i].slice(1);
+    }
+    return string.join(" ") 
+    // console.log("in funciton", string);
 }
 
 addLocationForm();
-// testComponent()

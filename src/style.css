@@ -25,12 +25,68 @@ body {
 
 .weather-container > p {
     font-size: 24px;
+    margin: 5px;
 }
 
-.weather-container > .current-temp {
-    font-size: 120px;
-    margin:0px;
+.current-temp {
+    font-size: 150px;
 }
+
+.temp-container {
+    display: flex;
+    margin: auto;
+}
+
+.temp-details {
+    display: flex;
+    flex-direction: column;
+    justify-content:center;
+}
+
+.temp-details {
+    margin: 0px;
+}
+.temp-container > p {
+    margin: 0px;
+}
+
+.weather-container > .city-state {
+    font-size: 36px;
+    text-decoration: underline;
+}
+
+.weather-container > .current-weather {
+    width: 200px;
+    height: 200px;
+    margin: auto;
+}
+
+.weather-container > .current-weather-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: auto;
+    margin-bottom: 0px;
+    position: relative;
+}
+
+.current-weather-container > .current-weather{
+    width: 200px;
+    height: 200px;
+    margin: auto;
+    position: relative;
+    bottom: 60px;
+}
+
+.current-weather-container > p {
+    margin-top: 0px;
+    font-size: 48px;
+}
+
+.sunrise-sunset {
+    font-size: 24px;
+}
+
 
 .test {
     height: 1000px;
@@ -39,4 +95,72 @@ body {
     background-repeat: no-repeat;
     background-size: cover;
     width: 100%;
+}
+
+@media (max-width: 450px) {
+
+    .weather-container > p {
+        font-size: 14px;
+        margin: 5px;
+    }
+    
+    .current-temp {
+        font-size: 75px;
+    }
+    
+    .temp-container {
+        display: flex;
+    }
+    
+    .temp-details {
+        display: flex;
+        flex-direction: column;
+        justify-content:center;
+    }
+    
+    .temp-details {
+        margin: 0px;
+    }
+
+    .temp-details > div, p {
+        font-size: 13px;
+    }
+
+    .weather-container > .city-state {
+        font-size: 28px;
+        text-decoration: underline;
+    }
+    
+    .weather-container > .current-weather-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin: auto;
+        margin-bottom: 0px;
+        position: relative;
+    }
+    
+    .current-weather-container {
+        height: 100px;
+    }
+    
+    .current-weather-container > .current-weather{
+        width: 100px;
+        height: 100px;
+        margin: auto;
+        position: relative;
+        bottom: 45px;
+    }
+    
+    .current-weather-container > p {
+        margin-top: 40px;
+        font-size: 24px;
+    }
+
+    .sunrise-sunset {
+        display: flex;
+        font-size: 12px;
+        justify-content: center;
+    }
+
 }

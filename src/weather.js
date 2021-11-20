@@ -11,7 +11,9 @@ function formatData(data) {
     // let windData = getWindData(data.wind);
     // console.log("WIND DATA", formatwindData, data.wind);
     const weatherData = {
+        "id": data.weather[0].id,
         "description": data.weather[0].description,
+        "icon": data.weather[0].icon, 
         "main": data.main,
         "wind": getWindData(data.wind),
         "clouds": data.clouds, // I think this is a measure of cloudcoverage
